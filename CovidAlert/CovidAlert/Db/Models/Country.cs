@@ -16,6 +16,8 @@ namespace CovidAlert.Db.Models
             set;
         }
 
+
+
         [Column("country_code")]
         [Required]
         public string Code
