@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ib="clr-namespace:CovidAlert.Behaviors;assembly=CovidAlert"
+    xmlns:vm="clr-namespace:CovidAlert.ViewModels;assembly=CovidAlert"
+    xmlns:loc="clr-namespace:CovidAlert.Localization;assembly=CovidAlert"
+    mc:Ignorable="d"
+    x:Class="CovidAlert.Views.FeedPage"
+    Title="{Binding Title}"
+    BindingContext="{Binding Path=FeedPageViewModel, Source={StaticResource ViewModels}, Mode=OneWay}">
+    <ContentPage.Resources>
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <ib:PageAwareBehavior />
+    </ContentPage.Behaviors>
+    <RefreshView
+        IsRefreshing="{Binding IsBusy, Mode=TwoWay}"
+        Command="{Binding RefreshItems}">
+        <CollectionView 
+            x:Name="ItemsCollectionView"
+            ItemsSource="{Binding Items}">
+            <d:CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>First Item</x:String>
+                    <x:String>Second Item</x:String>
+                    <x:String>Third Item</x:String>
+                    <x:String>Fourth Item</x:String>
+                    <x:String>Fifth Item</x:String>
+                    <x:String>Sixth Item</x:String>
+                </x:Array>
+            </d:CollectionView.ItemsSource>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:CountryDetailsViewModel">
+                    <Grid
+                        Padding="4">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer
+                                NumberOfTapsRequired="1"
+                                Tapped="OnItemSelected"
+                            />
+                        </Grid.GestureRecognizers>
+                        <Frame
+                            CornerRadius="4"
+                            BorderColor="LightGray">
+                            <StackLayout
+                                Orientation="Vertical">
+                                <Label
+                                    Text="{Binding Path=CountryName, Mode=OneWay}"
+                                    FontSize="Title"
+                                />
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span
+                                                Text="{x:Static loc:AppResources.FeedPage_Confirmed_Label}"
+                                                FontSize="Small"
+                                            />
+                                            <Span
+                                                Text="{Binding Path=Confirmed, StringFormat='{0:N0}', Mode=OneTime}"
+                                                FontSize="Small"
+                                            />
+                                            <Span
+                                                Text="{Binding Path=LastConfirmed, StringFormat=' ({0:N0})', Mode=OneTime}"
+                                                FontSize="Small"
+                                            />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Grid>
+                    <StackLayout
+                        Orientation="Horizontal"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand">
+                        <Label
+                            Text="{x:Static loc:AppResources.FeedPage_NoData}"
+                            FontSize="Caption"
+                        />
+                    </StackLayout>
+                </Grid>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </RefreshView> 
+</ContentPage>
